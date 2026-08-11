@@ -1,0 +1,42 @@
+ATUALIZAÇÃO v1.7 — CONTROLE DE INSTÂNCIA E REINÍCIO SEGURO
+============================================================
+
+OBJETIVO
+Evitar o erro:
+“The browser is already running ... Use a different userDataDir or stop the running browser first.”
+
+A v1.7 identifica quando a sessão do WhatsApp já está sendo usada e impede
+que uma segunda cópia do bot tente abrir o mesmo perfil.
+
+O QUE MUDA
+- INICIAR-AQUI.bat verifica o status antes de iniciar.
+- Se o bot já estiver ativo, aparece um menu de gerenciamento.
+- Reinício seguro encerra somente o Node/navegador ligados à sessão deste bot.
+- Travas antigas do Chrome/Edge só são removidas se a sessão não estiver em uso.
+- O Agendador de Tarefas passa a usar INICIAR-SERVICO.bat por meio do mesmo
+  INICIAR-BOT-OCULTO.vbs. Normalmente não é necessário reconfigurar a tarefa.
+- Um arquivo runtime\bot.pid.json ajuda a identificar a instância ativa.
+
+MENU QUANDO O BOT JÁ ESTÁ RODANDO
+1 - Ver status do bot
+2 - Reiniciar o bot em segundo plano
+3 - Abrir planilha de chamados
+4 - Encerrar o bot
+5 - Abrir log de execução
+0 - Sair
+
+NOVOS ATALHOS
+9-STATUS-DO-BOT.bat
+10-REINICIAR-BOT.bat
+
+IMPORTANTE
+A atualização NÃO apaga:
+- .wwebjs_auth (emparelhamento);
+- data\chamados.sqlite;
+- data\chamados.xlsx;
+- .env;
+- node_modules;
+- histórico e protocolos.
+
+Se o bot estiver em execução durante a atualização, o instalador poderá
+reiniciá-lo ao final para ativar a v1.7.

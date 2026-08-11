@@ -1,0 +1,45 @@
+GUIA RÁPIDO — BOT SUPORTE TI v1.7
+=================================
+
+COMO INICIAR
+1. Execute INICIAR-AQUI.bat.
+2. A v1.7 verifica primeiro se o bot já está em execução.
+3. Se já estiver funcionando em segundo plano, NÃO abre outra instância.
+4. Nesse caso aparece um menu para ver status, reiniciar, abrir a planilha ou encerrar.
+
+SE APARECER “BOT JÁ ESTÁ EM EXECUÇÃO”
+Isso é normal. O Agendador de Tarefas provavelmente já iniciou o bot.
+Escolha 0 para sair ou use as opções do menu.
+
+VER STATUS RAPIDAMENTE
+Execute: 9-STATUS-DO-BOT.bat
+
+REINICIAR COM SEGURANÇA
+Execute: 10-REINICIAR-BOT.bat
+Ele encerra somente os processos vinculados à sessão deste bot, limpa travas
+antigas quando for seguro e inicia novamente em segundo plano.
+
+INICIAR SEM CMD VISÍVEL
+Use INICIAR-BOT-OCULTO.vbs ou mantenha-o configurado no Agendador de Tarefas.
+Na v1.7 ele chama INICIAR-SERVICO.bat, que não inicia uma segunda instância.
+
+ENCERRAR UM CHAMADO PELO EXCEL
+1. Mantenha o bot funcionando.
+2. Execute 8-ABRIR-PLANILHA.bat.
+3. Abra a aba Chamados.
+4. Encontre o protocolo.
+5. Altere SOMENTE a coluna Status para Encerrado.
+6. Salve com Ctrl + S.
+7. O usuário receberá a mensagem de encerramento no WhatsApp.
+
+PERGUNTAS DO CHAMADO
+1 de 3: Nome, Local
+2 de 3: Descrição do problema (sem patrimônio)
+3 de 3: Grau de urgência
+
+HORÁRIO DO ATENDIMENTO
+Segunda a sexta:
+08h às 11h30
+12h45 às 18h
+
+Fora desses horários, o bot envia a mensagem de ausência.

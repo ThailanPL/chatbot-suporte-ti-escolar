@@ -1,0 +1,93 @@
+=============================================================
+ EXEMPLO DE CONVERSA — 3 PERGUNTAS
+=============================================================
+
+USUÁRIO:
+Olá
+
+BOT:
+Olá! Você entrou em contato com o Suporte TI da escola.
+Responsável: Thailan.
+Para facilitar, cada solicitação terá somente 3 perguntas.
+
+[menu de categorias]
+
+USUÁRIO:
+3
+
+BOT:
+Você selecionou: Impressora ou copiadora.
+
+Pergunta 1 de 3:
+Informe somente seu nome e local, separados por vírgula.
+Exemplo: Ana Silva, Recepção
+
+USUÁRIO:
+Maria Souza, Sala da Coordenação
+
+BOT:
+Pergunta 2 de 3:
+Informe o modelo da impressora ou copiadora, se souber, e descreva o
+problema apresentado.
+
+USUÁRIO:
+Impressora HP LaserJet. Não imprime e aparece a mensagem
+papel atolado.
+
+BOT:
+Pergunta 3 de 3 — grau de urgência:
+1. Baixa
+2. Média
+3. Alta
+4. Crítica
+
+USUÁRIO:
+3
+
+BOT:
+Solicitação registrada com sucesso!
+Protocolo: TI-20260806-0042
+Categoria: Impressora ou copiadora
+Urgência: Alta
+Status: Recebido
+
+=============================================================
+ EXEMPLO FORA DO HORÁRIO
+=============================================================
+
+USUÁRIO:
+Olá
+
+BOT:
+No momento, o Suporte TI está fora do horário de atendimento.
+
+Segunda a sexta:
+08h às 11h30
+12h45 às 18h
+
+1. Registrar solicitação
+2. Consultar o horário
+0. Encerrar atendimento
+
+=============================================================
+EXEMPLO DE ENCERRAMENTO PELA PLANILHA
+=============================================================
+
+A equipe de TI abre data\chamados.xlsx, localiza o protocolo e altera a coluna Status para:
+
+Encerrado
+
+Depois de salvar, o solicitante recebe:
+
+✅ Chamado encerrado
+
+Olá, Ana Silva!
+
+Seu chamado foi encerrado pelo Suporte TI.
+
+Protocolo: TI-20260806-0042
+Categoria: Internet ou Wi-Fi
+Status: Encerrado
+Encerrado em: 06/08/2026, 17:30
+
+Caso o problema continue, envie menu para registrar uma nova solicitação e informe o protocolo anterior.

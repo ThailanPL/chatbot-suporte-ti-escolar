@@ -1,0 +1,27 @@
+CORREÇÃO V1.2 - MENSAGEM DE ERRO TEMPORÁRIO
+===========================================
+
+Esta versão remove uma consulta desnecessária chamada message.getChat().
+Em algumas conversas recentes do WhatsApp, principalmente as identificadas
+internamente com @lid, essa consulta pode falhar mesmo quando o WhatsApp está
+conectado e consegue enviar mensagens.
+
+O que mudou:
+- Remoção de message.getChat() no recebimento das mensagens.
+- Compatibilidade com conversas privadas identificadas por @lid.
+- Filtro direto para grupos, status, listas de transmissão e canais.
+- Registro detalhado de falhas em logs\erros.log.
+- Novo atalho 7-VER-ERROS.bat.
+- Exibição da versão 1.2.0 no CMD quando o bot ficar pronto.
+
+TESTE RECOMENDADO
+-----------------
+1. Feche o CMD antigo do bot.
+2. Execute INICIAR-AQUI.bat.
+3. Aguarde aparecer: Bot iniciado e aguardando mensagens privadas.
+4. Envie "Olá" de outro número para o WhatsApp do Suporte TI.
+5. O bot deve iniciar a coleta do nome e dos dados do atendimento.
+
+Se ainda ocorrer erro:
+- Execute 7-VER-ERROS.bat.
+- Copie o último bloco do arquivo e envie para análise.

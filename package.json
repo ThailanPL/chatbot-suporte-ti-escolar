@@ -1,0 +1,24 @@
+{
+  "name": "chatbot-suporte-ti-escolar",
+  "version": "1.7.0",
+  "description": "Bot de atendimento com 3 perguntas, SQLite, Excel bidirecional, encerramento automático e controle de instância única - Suporte TI Thailan",
+  "main": "chatbot.js",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "start": "node --no-warnings chatbot.js",
+    "diagnostico": "node --no-warnings diagnostico.js",
+    "chamados": "node --no-warnings gerenciar-chamados.js",
+    "verificar": "node --check chatbot.js && node --check bot-control.js && node --check database.js && node --check excel-report.js && node --check excel-sync.js && node --check exportar-excel.js && node --check horario.js && node --check browser-path.js && node --check verificar-navegador.js && node --check gerenciar-chamados.js && node --check diagnostico.js",
+    "verificar-navegador": "node verificar-navegador.js",
+    "excel": "node --no-warnings exportar-excel.js",
+    "status": "node --no-warnings bot-control.js details",
+    "parar": "node --no-warnings bot-control.js stop"
+  },
+  "dependencies": {
+    "qrcode-terminal": "0.12.0",
+    "whatsapp-web.js": "1.34.7"
+  }
+}

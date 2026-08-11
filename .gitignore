@@ -1,0 +1,50 @@
+# =========================================
+# BOT SUPORTE TI v1.7
+# Arquivos que NÃO devem ir ao GitHub
+# =========================================
+
+# Dependências Node
+node_modules/
+
+# Variáveis de ambiente / segredos
+.env
+.env.*
+!.env.example
+
+# Sessão do WhatsApp
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Bancos de dados locais
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.sqlite-journal
+
+# Dados reais dos chamados
+dados/chamados.jsonl
+dados/anexos/
+
+# Diretórios de dados gerados
+data/
+database/
+backups/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.bak
+
+# Sistema operacional
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# VS Code local
+.vscode/settings.json

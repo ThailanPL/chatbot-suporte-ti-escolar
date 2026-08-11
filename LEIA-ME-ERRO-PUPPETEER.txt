@@ -1,0 +1,36 @@
+CORREÇÃO DO ERRO “FAILED TO SET UP CHROME”
+================================================
+
+O erro acontece quando o Puppeteer tenta baixar uma cópia própria do Chrome e
+o download fica incompleto. Os avisos sobre glob e fluent-ffmpeg não são a causa.
+
+SOLUÇÃO MAIS FÁCIL
+------------------
+1. Extraia esta versão corrigida para uma pasta nova.
+2. Dê dois cliques em INICIAR-AQUI.bat.
+3. O instalador localizará o Google Chrome ou Microsoft Edge instalado.
+4. Ele instalará os módulos sem baixar outro navegador.
+5. Escaneie o QR Code quando ele aparecer.
+
+CASO TENHA TENTADO A VERSÃO ANTERIOR NA MESMA PASTA
+---------------------------------------------------
+Execute primeiro 5-CORRIGIR-INSTALACAO.bat.
+
+O arquivo remove somente:
+- node_modules;
+- package-lock.json;
+- cache incompleto do Puppeteer.
+
+Ele NÃO remove:
+- data/chamados.json;
+- a sessão do WhatsApp em .wwebjs_auth;
+- suas configurações do arquivo .env.
+
+NAVEGADOR NÃO ENCONTRADO
+------------------------
+O bot procura automaticamente Chrome, Edge e Brave.
+Se o navegador estiver em outro local, abra o arquivo .env e informe:
+
+BROWSER_EXECUTABLE_PATH=C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+
+Depois salve e execute INICIAR-AQUI.bat novamente.

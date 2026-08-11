@@ -1,0 +1,21 @@
+CORREÇÃO v1.7 — BOT WHATSAPP SUPORTE TI
+=======================================
+
+Esta versão corrige o erro de sessão ocupada / navegador já em execução.
+
+COMO APLICAR
+1. Extraia esta pasta.
+2. Coloque a pasta "Correcao_Bot_WhatsApp_v1.7_Controle_Instancia" DENTRO
+   da pasta principal do bot, onde existe chatbot.js.
+3. Execute APLICAR-ATUALIZACAO-v1.7.bat.
+4. Digite S para confirmar.
+5. Ao final, o instalador pode reiniciar o bot em segundo plano.
+
+NÃO É NECESSÁRIO APAGAR:
+- .wwebjs_auth;
+- banco SQLite;
+- chamados.xlsx;
+- .env;
+- node_modules.
+
+O emparelhamento do WhatsApp será preservado.
