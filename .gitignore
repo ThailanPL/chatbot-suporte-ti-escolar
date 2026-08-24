@@ -16,3 +16,10 @@ sessions/
 # Sistema operacional
 Thumbs.db
 .DS_Store
+
+# Arquivos temporários
+*.tmp
+*.temp
+
+# Backups locais
+*.bak
