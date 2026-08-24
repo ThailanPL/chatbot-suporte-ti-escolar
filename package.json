@@ -1,7 +1,7 @@
 {
   "name": "chatbot-suporte-ti-escolar",
   "version": "1.7.0",
-  "description": "Bot de atendimento com 3 perguntas, SQLite, Excel bidirecional, encerramento automático e controle de instância única - Suporte TI Thailan",
+  "description": "Chatbot para automação da triagem, registro e gerenciamento de chamados de suporte técnico via WhatsApp.",
   "main": "chatbot.js",
   "private": true,
   "engines": {
