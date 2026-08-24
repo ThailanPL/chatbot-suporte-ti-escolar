@@ -7,15 +7,16 @@ node_modules/
 # Sessão do WhatsApp
 .wwebjs_auth/
 .wwebjs_cache/
-session/ 
+session/
 sessions/
 
 # Logs
 *.log
 
-# Sistema operacional
-Thumbs.db
-.DS_Store
+# Dados locais do sistema
+data/*
+!data/.gitkeep
+!data/README.md
 
 # Arquivos temporários
 *.tmp
@@ -23,3 +24,7 @@ Thumbs.db
 
 # Backups locais
 *.bak
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
