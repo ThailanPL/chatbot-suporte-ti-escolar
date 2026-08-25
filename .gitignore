@@ -28,3 +28,7 @@ data/*
 # Sistema operacional
 Thumbs.db
 .DS_Store
+
+# Arquivos temporários de execução
+runtime/*
+!runtime/.gitkeep
