@@ -4,6 +4,17 @@
   "description": "Chatbot para automação da triagem, registro e gerenciamento de chamados de suporte técnico via WhatsApp.",
   "main": "chatbot.js",
   "private": true,
+  "author": "Thailan Lima",
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "whatsapp",
+    "chatbot",
+    "automation",
+    "helpdesk",
+    "it-support",
+    "technical-support"
+  ],
   "engines": {
     "node": ">=22.13.0"
   },
