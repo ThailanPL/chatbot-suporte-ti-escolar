@@ -2,7 +2,7 @@
 
 // =============================================================
 // BOT WHATSAPP — SUPORTE TI (THAILAN)
-// Versão 1.7: instância única + controle seguro de execução em segundo plano.
+// Versão 1.8: atendimento livre na opção 18 + detecção inteligente de chamados.
 // =============================================================
 
 const fs = require('fs');
@@ -43,7 +43,7 @@ function loadEnvFile() {
 
 loadEnvFile();
 
-const BOT_VERSION = '1.7.0';
+const BOT_VERSION = '1.8.0';
 const CONFIG = {
   timezone: process.env.TIMEZONE || 'America/Fortaleza',
   supportName: process.env.SUPPORT_NAME || 'Thailan',
@@ -184,26 +184,67 @@ const CATEGORIES = {
     detailQuestion: 'Informe o equipamento, a manutenção desejada e o melhor período para realizar o serviço.',
   },
   '16': {
-    title: 'Acompanhamento de solicitação',
-    statusLookup: true,
-  },
-  '17': {
     title: 'Outro problema',
     detailQuestion: 'Descreva o problema, informe o equipamento ou serviço envolvido, onde ocorre e quando começou.',
   },
+  '17': {
+    title: 'Acompanhamento de solicitação',
+    statusLookup: true,
+  },
   '18': {
     title: `Falar com ${CONFIG.supportName}`,
-    detailQuestion: `Descreva resumidamente o assunto que deseja tratar com ${CONFIG.supportName} e informe se há algum prazo importante.`,
+    freeChat: true,
   },
 };
 
-const MAIN_MENU = `*${CONFIG.department} — ${CONFIG.supportName}* 🖥️\n\nEscolha uma opção digitando somente o número:\n\n1. Internet ou Wi-Fi\n2. Computador ou notebook\n3. Impressora ou copiadora\n4. TV, projetor ou equipamento de sala\n5. E-mail institucional\n6. Senha ou acesso a sistemas\n7. Sistema acadêmico ou administrativo\n8. Instalação ou atualização de programas\n9. Arquivos, pastas, backup ou recuperação\n10. Vírus, segurança ou atividade suspeita\n11. Solicitação de equipamento\n12. Reserva de equipamento\n13. Criação, alteração ou exclusão de usuário\n14. Telefone, WhatsApp ou comunicação institucional\n15. Manutenção preventiva\n16. Acompanhamento de solicitação\n17. Outro problema\n18. Falar com ${CONFIG.supportName}\n0. Encerrar atendimento\n\n_O chamado terá somente 3 perguntas._\n_Comandos: menu, voltar, cancelar, status e atendente._`;
+const MAIN_MENU = `*${CONFIG.department} — ${CONFIG.supportName}* 🖥️\n\nEscolha uma opção digitando somente o número:\n\n1. Internet ou Wi-Fi\n2. Computador ou notebook\n3. Impressora ou copiadora\n4. TV, projetor ou equipamento de sala\n5. E-mail institucional\n6. Senha ou acesso a sistemas\n7. Sistema acadêmico ou administrativo\n8. Instalação ou atualização de programas\n9. Arquivos, pastas, backup ou recuperação\n10. Vírus, segurança ou atividade suspeita\n11. Solicitação de equipamento\n12. Reserva de equipamento\n13. Criação, alteração ou exclusão de usuário\n14. Telefone, WhatsApp ou comunicação institucional\n15. Manutenção preventiva\n16. Outro problema\n17. Acompanhamento de solicitação\n18. Falar com ${CONFIG.supportName}\n0. Encerrar atendimento\n\n_O chamado terá somente 3 perguntas._\n_Comandos: menu, voltar, cancelar, status e atendente._`;
 
 const HOURS_TEXT = `🕐 *Horário de atendimento*\n\nSegunda a sexta-feira:\n• 08h às 11h30\n• 12h45 às 18h\n\nNão há atendimento durante o intervalo de 11h30 às 12h45, aos sábados e aos domingos.`;
 
 const ABSENCE_MESSAGE = `Olá! No momento, o *${CONFIG.department}* está fora do horário de atendimento.\n\n${HOURS_TEXT}\n\nVocê pode registrar a solicitação agora. Ela ficará salva e será analisada no próximo período de atendimento.\n\n1. Registrar solicitação\n2. Consultar o horário\n0. Encerrar atendimento`;
 
 const PRIVACY_NOTICE = '🔒 Não envie senhas, códigos de autenticação, CPF, dados bancários ou informações pessoais desnecessárias.';
+
+const FREE_CHAT_KEYWORDS = {
+  '1': ['internet', 'wi-fi', 'wifi', 'sem internet', 'rede sem conexao', 'nao conecta', 'conexao'],
+  '2': ['computador', 'notebook', 'pc', 'windows', 'travando', 'travou', 'lento', 'tela preta', 'nao liga', 'reiniciando'],
+  '3': ['impressora', 'copiadora', 'scanner', 'imprimir', 'impressao', 'toner', 'tinta', 'papel atolado', 'fila de impressao'],
+  '4': ['projetor', 'datashow', 'tv da sala', 'televisao', 'hdmi', 'equipamento de sala', 'caixa de som'],
+  '5': ['e-mail institucional', 'email institucional', 'gmail', 'e-mail nao envia', 'email nao envia', 'e-mail nao recebe', 'email nao recebe'],
+  '6': ['senha', 'login', 'acesso bloqueado', 'sem acesso', 'permissao', 'autenticacao', 'conta bloqueada'],
+  '7': ['sistema academico', 'sistema administrativo', 'portal', 'diario', 'frequencia', 'notas', 'matricula'],
+  '8': ['instalar programa', 'instalacao de programa', 'atualizar programa', 'atualizacao de programa', 'software', 'aplicativo'],
+  '9': ['arquivo', 'pasta', 'backup', 'recuperar arquivo', 'arquivo excluido', 'drive', 'armazenamento'],
+  '10': ['virus', 'malware', 'phishing', 'conta invadida', 'atividade suspeita', 'link suspeito', 'seguranca'],
+  '11': ['solicitar equipamento', 'preciso de equipamento', 'equipamento novo', 'pedido de equipamento'],
+  '12': ['reservar equipamento', 'reserva de equipamento', 'emprestimo de equipamento', 'emprestar equipamento', 'reservar notebook', 'reservar projetor'],
+  '13': ['criar usuario', 'novo usuario', 'alterar usuario', 'excluir usuario', 'remover usuario', 'conta de colaborador'],
+  '14': ['telefone', 'ramal', 'whatsapp', 'ligacao', 'chamada', 'chip', 'comunicacao institucional'],
+  '15': ['manutencao preventiva', 'preventiva', 'limpeza de computador', 'revisao de equipamento'],
+  '16': ['outro problema', 'problema nao listado', 'nao esta na lista'],
+};
+
+function keywordMatches(text, keyword) {
+  const normalizedText = normalizeText(text);
+  const normalizedKeyword = normalizeText(keyword);
+  if (!normalizedText || !normalizedKeyword) return false;
+  if (normalizedKeyword.includes(' ')) return normalizedText.includes(normalizedKeyword);
+  const wordsOnly = normalizedText.replace(/[^a-z0-9]+/g, ' ').trim();
+  return ` ${wordsOnly} `.includes(` ${normalizedKeyword} `);
+}
+
+function detectSupportCategory(text) {
+  const matches = [];
+  for (const [categoryKey, keywords] of Object.entries(FREE_CHAT_KEYWORDS)) {
+    for (const keyword of keywords) {
+      if (keywordMatches(text, keyword)) matches.push({ categoryKey, keyword, length: normalizeText(keyword).length });
+    }
+  }
+  if (!matches.length) return null;
+  matches.sort((a, b) => b.length - a.length);
+  return matches[0];
+}
+
 
 const browserExecutablePath = findBrowserExecutable();
 const puppeteerOptions = {
@@ -297,6 +338,8 @@ function createSession(chatId) {
     step: outside ? 'outside_menu' : 'menu',
     previousStep: null,
     pendingCategory: null,
+    pendingFreeChatMessage: null,
+    returnToFreeChat: false,
     ticket: null,
     outsideBusinessHours: outside,
     absenceNotifiedKey: outside ? absencePeriodKey() : null,
@@ -494,6 +537,8 @@ async function showMainMenu(chatId, session) {
   session.step = 'menu';
   session.ticket = null;
   session.pendingCategory = null;
+  session.pendingFreeChatMessage = null;
+  session.returnToFreeChat = false;
   session.lastActivity = Date.now();
   await sendText(chatId, MAIN_MENU);
 }
@@ -527,6 +572,11 @@ async function startCategory(chatId, session, categoryKey) {
     return;
   }
 
+  if (category.freeChat) {
+    await startFreeChat(chatId, session);
+    return;
+  }
+
   session.ticket = makeTicketSession(categoryKey);
   session.step = 'question_identity';
 
@@ -537,15 +587,57 @@ async function startCategory(chatId, session, categoryKey) {
   if (category.reservationNotice) {
     introduction += '\n\n📅 O registro não garante a reserva. A disponibilidade será confirmada pelo setor de TI.';
   }
-  if (categoryKey === '18') {
-    introduction += `\n\nO retorno de ${CONFIG.supportName} acontecerá conforme disponibilidade e prioridade.`;
-  }
-
   await sendText(chatId, introduction);
   await sendText(
     chatId,
     '*Pergunta 1 de 3:*\nInforme somente seu *nome e local*, separados por vírgula `,`.\n\nExemplo: Ana Silva, Recepção',
   );
+}
+
+
+async function startFreeChat(chatId, session) {
+  session.step = 'free_chat';
+  session.ticket = null;
+  session.pendingCategory = null;
+  session.pendingFreeChatMessage = null;
+  session.returnToFreeChat = false;
+  session.lastActivity = Date.now();
+  await sendText(chatId, `👨‍💻 *Atendimento direto com ${CONFIG.supportName}*\n\nPode enviar sua mensagem normalmente. O chatbot não fará as 3 perguntas enquanto você estiver neste modo.\n\nSe a mensagem indicar uma solicitação de TI relacionada às opções *1 a 16*, eu perguntarei se você deseja transformá-la em chamado.\n\n_Comandos: menu, voltar, cancelar e status._`);
+}
+
+async function processFreeChat(chatId, session, bodyOriginal, message) {
+  if (!bodyOriginal && message?.hasMedia) return;
+  const detected = detectSupportCategory(bodyOriginal);
+  if (!detected) return;
+  session.pendingCategory = detected.categoryKey;
+  session.pendingFreeChatMessage = bodyOriginal;
+  session.step = 'free_chat_confirm';
+  const category = CATEGORIES[detected.categoryKey];
+  await sendText(chatId, `🔎 Parece que sua mensagem está relacionada a *${category.title}*.\n\nDeseja transformar isso em um chamado de suporte?\n\n*1* - Sim, abrir chamado\n*2* - Não, continuar falando com ${CONFIG.supportName}`);
+}
+
+async function processFreeChatConfirmation(chatId, session, body) {
+  const normalized = normalizeText(body);
+  if (['1', 'sim', 's', 'abrir', 'chamado'].includes(normalized)) {
+    const categoryKey = session.pendingCategory;
+    session.pendingCategory = null;
+    session.pendingFreeChatMessage = null;
+    session.returnToFreeChat = true;
+    if (!categoryKey || !CATEGORIES[categoryKey] || CATEGORIES[categoryKey].statusLookup || CATEGORIES[categoryKey].freeChat) {
+      await startFreeChat(chatId, session);
+      return;
+    }
+    await startCategory(chatId, session, categoryKey);
+    return;
+  }
+  if (['2', 'nao', 'n', 'continuar'].includes(normalized)) {
+    session.pendingCategory = null;
+    session.pendingFreeChatMessage = null;
+    session.step = 'free_chat';
+    await sendText(chatId, `Certo. Continuamos no atendimento direto com *${CONFIG.supportName}*. Pode escrever normalmente.`);
+    return;
+  }
+  await sendText(chatId, `Digite *1* para abrir o chamado ou *2* para continuar falando com ${CONFIG.supportName}.`);
 }
 
 async function processIdentity(chatId, session, body) {
@@ -676,7 +768,14 @@ async function processUrgency(chatId, session, body) {
   }
 
   await sendText(chatId, finalMessage);
+  const returnToFreeChat = session.returnToFreeChat;
   session.ticket = null;
+  session.returnToFreeChat = false;
+  if (returnToFreeChat) {
+    session.step = 'free_chat';
+    await sendText(chatId, `Você continua no atendimento direto com *${CONFIG.supportName}*. Pode enviar outra mensagem normalmente.`);
+    return;
+  }
   session.step = 'menu';
   await sendText(chatId, 'Para registrar outra solicitação, envie *menu*. Para encerrar, envie *0*.');
 }
@@ -724,6 +823,17 @@ async function processCloseConfirmation(chatId, session, body) {
 }
 
 async function goBack(chatId, session) {
+  if (session.step === 'free_chat_confirm') {
+    session.pendingCategory = null;
+    session.pendingFreeChatMessage = null;
+    session.step = 'free_chat';
+    await sendText(chatId, `Continuamos no atendimento direto com *${CONFIG.supportName}*.`);
+    return;
+  }
+  if (session.step === 'free_chat') {
+    await showMainMenu(chatId, session);
+    return;
+  }
   if (session.step === 'question_details' && session.ticket) {
     session.ticket.answers = [];
     session.ticket.fields = {};
@@ -800,7 +910,7 @@ async function processMessage(message) {
   }
 
   if (body === 'atendente') {
-    await startCategory(chatId, session, '18');
+    await startFreeChat(chatId, session);
     return;
   }
 
@@ -810,6 +920,12 @@ async function processMessage(message) {
       break;
     case 'menu':
       await startCategory(chatId, session, bodyOriginal);
+      break;
+    case 'free_chat':
+      await processFreeChat(chatId, session, bodyOriginal, message);
+      break;
+    case 'free_chat_confirm':
+      await processFreeChatConfirmation(chatId, session, bodyOriginal);
       break;
     case 'question_identity':
       await processIdentity(chatId, session, bodyOriginal);
