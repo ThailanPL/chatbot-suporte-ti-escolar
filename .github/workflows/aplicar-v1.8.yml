@@ -1,0 +1,49 @@
+name: Aplicar atualização v1.8
+
+on:
+  push:
+    branches:
+      - atualizacao-v1.8
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          ref: atualizacao-v1.8
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Aplicar atualização
+        run: node APLICAR-ATUALIZACAO-v1.8.js
+
+      - name: Validar sintaxe do chatbot
+        run: node --check chatbot.js
+
+      - name: Confirmar versão
+        run: |
+          grep -q "const BOT_VERSION = '1.8.0';" chatbot.js
+          grep -q "free_chat_confirm" chatbot.js
+
+      - name: Remover arquivos temporários
+        run: |
+          rm -f APLICAR-ATUALIZACAO-v1.8.js
+          rm -f backup-antes-v1.8-chatbot.js
+          rm -f .github/workflows/aplicar-v1.8.yml
+
+      - name: Registrar atualização
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add chatbot.js APLICAR-ATUALIZACAO-v1.8.js backup-antes-v1.8-chatbot.js .github/workflows/aplicar-v1.8.yml
+          git commit -m "feat: atualizar chatbot para v1.8.0" || exit 0
+          git push origin HEAD:atualizacao-v1.8
